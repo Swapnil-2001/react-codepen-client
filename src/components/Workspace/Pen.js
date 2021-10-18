@@ -24,6 +24,17 @@ const Pen = () => {
 
   return (
     <>
+      <nav className="navbar">
+        <div className="navbar-item">
+          <div>React-Codepen</div>
+          <div style={{ marginLeft: "auto" }}>Save</div>
+        </div>
+        <div className="navbar-item project-name">Name</div>
+        <div className="navbar-item">
+          <div>Like</div>
+          <div style={{ marginLeft: "auto" }}>profile</div>
+        </div>
+      </nav>
       <div className="pane top-pane">
         <Editor
           language="xml"
