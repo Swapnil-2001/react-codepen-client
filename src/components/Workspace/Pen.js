@@ -1,24 +1,35 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
+import { Link, useHistory } from "react-router-dom";
 import Button from "@mui/material/Button";
 
 import Editor from "./Editor";
-import { createPen, updatePen } from "../../actions/pen";
+import { getPenById, createPen, updatePen } from "../../actions/pen";
 import "./styles.css";
 
-const Pen = () => {
+const Pen = (props) => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { name, pen } = useSelector((state) => state.pen);
+  const { isLoading, name, pen } = useSelector((state) => state.pen);
   const [html, setHtml] = useState("");
   const [css, setCss] = useState("");
   const [js, setJs] = useState("");
   const [srcDoc, setSrcDoc] = useState("");
 
   useEffect(() => {
-    if (!name) history.push("/");
-  }, [name, history]);
+    if (props.match.params.id !== "new") {
+      dispatch(getPenById(props.match.params.id));
+    }
+  }, [dispatch, props]);
+
+  useEffect(() => {
+    if (pen) {
+      setHtml(pen.html);
+      setCss(pen.css);
+      setJs(pen.js);
+    }
+  }, [pen]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -50,11 +61,18 @@ const Pen = () => {
     }
   };
 
+  if (isLoading)
+    return (
+      <div>
+        <CircularProgress />
+      </div>
+    );
+
   return (
     <>
       <nav className="navbar">
         <div className="navbar-item">
-          <div>React-Codepen</div>
+          <Link to="/">React-Codepen</Link>
           <Button onClick={handleSave} style={{ marginLeft: "auto" }}>
             Save
           </Button>

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -7,7 +7,8 @@ import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 
 import useStyles from "./styles";
-import { SET_NAME } from "../../constants/actionTypes";
+import { getAllPens } from "../../actions/pen";
+import { SET_NAME, LOGOUT } from "../../constants/actionTypes";
 
 const style = {
   position: "absolute",
@@ -24,13 +25,23 @@ const style = {
 const Home = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+  const { allPens } = useSelector((state) => state.pen);
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const classes = useStyles();
 
+  useEffect(() => {
+    dispatch(getAllPens());
+  }, [dispatch]);
+
   const handleClick = () => {
     dispatch({ type: SET_NAME, name });
     history.push("/pen");
+  };
+
+  const logout = () => {
+    dispatch({ type: LOGOUT });
+    history.push("/login");
   };
 
   return (
@@ -38,6 +49,17 @@ const Home = () => {
       <Button style={{ textTransform: "none" }} onClick={() => setOpen(true)}>
         New pen
       </Button>
+      <Button onClick={logout}>Log Out</Button>
+      {allPens?.map((pen) => (
+        <div
+          key={pen._id}
+          onClick={() => {
+            history.push(`/pen/${pen._id}`);
+          }}
+        >
+          {pen.name}
+        </div>
+      ))}
       <Modal
         open={open}
         onClose={() => setOpen(false)}
