@@ -45,21 +45,39 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <div style={{ padding: "25px 50px" }}>
       <Button style={{ textTransform: "none" }} onClick={() => setOpen(true)}>
         New pen
       </Button>
       <Button onClick={logout}>Log Out</Button>
-      {allPens?.map((pen) => (
-        <div
-          key={pen._id}
-          onClick={() => {
-            history.push(`/pen/${pen._id}`);
-          }}
-        >
-          {pen.name}
-        </div>
-      ))}
+      <div className={classes.wrapper}>
+        {allPens?.map((pen) => (
+          <div
+            key={pen._id}
+            className={classes.thumbnail}
+            onClick={() => {
+              history.push(`/pen/${pen._id}`);
+            }}
+          >
+            <div className={classes.frame}>
+              <iframe
+                scrolling="no"
+                srcDoc={`<html>
+                  <style>${pen.css}</style>
+                  <body>${pen.html}</body>
+                  <script>${pen.js}</script>
+                </html>`}
+                title="output"
+                sandbox="allow-scripts"
+                frameBorder="0"
+                width="100%"
+                height="100%"
+              />
+            </div>
+            <p>{pen.name}</p>
+          </div>
+        ))}
+      </div>
       <Modal
         open={open}
         onClose={() => setOpen(false)}

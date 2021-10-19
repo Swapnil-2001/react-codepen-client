@@ -11,6 +11,7 @@
   display: flex;
   align-items: center;
   background-color: hsl(225, 6%, 13%);
+  padding: 0.5rem 0;
 }
 
 .navbar-item {
@@ -21,6 +22,7 @@
 }
 
 .project-name {
+  color: white;
   justify-content: center;
 }
 

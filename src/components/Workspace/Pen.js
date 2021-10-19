@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Link, useHistory } from "react-router-dom";
-import Button from "@mui/material/Button";
 import SaveIcon from "@mui/icons-material/Save";
 
 import Editor from "./Editor";
@@ -18,8 +17,8 @@ const Pen = ({
   const history = useHistory();
   const dispatch = useDispatch();
   const { isLoading, name, pen } = useSelector((state) => state.pen);
-  const [html, setHtml] = useState("");
-  const [css, setCss] = useState("");
+  const [html, setHtml] = useState("Hey There!");
+  const [css, setCss] = useState("body {\n  background: white;\n}");
   const [js, setJs] = useState("");
   const [srcDoc, setSrcDoc] = useState("");
 
@@ -73,8 +72,14 @@ const Pen = ({
 
   if (isLoading)
     return (
-      <div>
-        <CircularProgress />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "75px",
+        }}
+      >
+        <CircularProgress style={{ color: "white" }} />
       </div>
     );
 
@@ -94,9 +99,10 @@ const Pen = ({
           >
             React-Codepen
           </Link>
-          <Button onClick={handleSave} style={{ marginLeft: "auto" }}>
-            <SaveIcon />
-          </Button>
+          <SaveIcon
+            onClick={handleSave}
+            style={{ cursor: "pointer", marginLeft: "auto", color: "white" }}
+          />
         </div>
         <div className="navbar-item project-name">{name}</div>
         <div className="navbar-item">

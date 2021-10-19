@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material.css";
+import "codemirror/theme/midnight.css";
 import "codemirror/mode/xml/xml";
 import "codemirror/mode/css/css";
 import "codemirror/mode/javascript/javascript";
@@ -37,6 +38,7 @@ const Editor = ({ displayName, language, value, onChange }) => {
           mode: language,
           lineNumbers: true,
           theme: "material",
+          scrollbarStyle: "null",
         }}
       />
     </div>
