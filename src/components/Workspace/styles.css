@@ -9,6 +9,8 @@
 
 .navbar {
   display: flex;
+  align-items: center;
+  background-color: hsl(225, 6%, 13%);
 }
 
 .navbar-item {

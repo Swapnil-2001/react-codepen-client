@@ -36,7 +36,7 @@ const Home = () => {
 
   const handleClick = () => {
     dispatch({ type: SET_NAME, name });
-    history.push("/pen");
+    history.push("/pen/new");
   };
 
   const logout = () => {

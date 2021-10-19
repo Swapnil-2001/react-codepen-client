@@ -26,10 +26,11 @@ export const getPenById = (id) => async (dispatch) => {
   }
 };
 
-export const createPen = (penData) => async (dispatch) => {
+export const createPen = (penData, history) => async (dispatch) => {
   try {
     const { data } = await api.createPen(penData);
     dispatch({ type: SET_PEN, data });
+    history.push(`/pen/${data._id}`);
   } catch (error) {
     console.log(error);
   }

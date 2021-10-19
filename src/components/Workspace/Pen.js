@@ -3,12 +3,18 @@ import { useDispatch, useSelector } from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Link, useHistory } from "react-router-dom";
 import Button from "@mui/material/Button";
+import SaveIcon from "@mui/icons-material/Save";
 
 import Editor from "./Editor";
 import { getPenById, createPen, updatePen } from "../../actions/pen";
 import "./styles.css";
 
-const Pen = (props) => {
+const Pen = ({
+  match: {
+    params: { id },
+  },
+}) => {
+  const user = JSON.parse(localStorage.getItem("profile"));
   const history = useHistory();
   const dispatch = useDispatch();
   const { isLoading, name, pen } = useSelector((state) => state.pen);
@@ -18,18 +24,18 @@ const Pen = (props) => {
   const [srcDoc, setSrcDoc] = useState("");
 
   useEffect(() => {
-    if (props.match.params.id !== "new") {
-      dispatch(getPenById(props.match.params.id));
-    }
-  }, [dispatch, props]);
+    if (id !== "new") {
+      dispatch(getPenById(id));
+    } else if (!name) history.push("/");
+  }, [dispatch, id, history, name]);
 
   useEffect(() => {
-    if (pen) {
+    if (pen && id !== "new") {
       setHtml(pen.html);
       setCss(pen.css);
       setJs(pen.js);
     }
-  }, [pen]);
+  }, [pen, id]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -45,19 +51,23 @@ const Pen = (props) => {
   }, [html, css, js]);
 
   const handleSave = () => {
-    if (!pen) {
-      dispatch(createPen({ name, html, css, js }));
+    if (id === "new") {
+      dispatch(createPen({ name, html, css, js }, history));
     } else {
-      dispatch(
-        updatePen(pen._id, {
-          name,
-          html,
-          css,
-          js,
-          likes: pen.likes,
-          creator: pen.creator,
-        })
-      );
+      if (user?.result?._id === pen.creator) {
+        dispatch(
+          updatePen(pen._id, {
+            name,
+            html,
+            css,
+            js,
+            likes: pen.likes,
+            creator: pen.creator,
+          })
+        );
+      } else {
+        dispatch(createPen({ name, html, css, js }, history));
+      }
     }
   };
 
@@ -72,9 +82,20 @@ const Pen = (props) => {
     <>
       <nav className="navbar">
         <div className="navbar-item">
-          <Link to="/">React-Codepen</Link>
+          <Link
+            to="/"
+            style={{
+              textDecoration: "none",
+              fontWeight: "700",
+              margin: "auto 0",
+              marginLeft: "15px",
+              color: "white",
+            }}
+          >
+            React-Codepen
+          </Link>
           <Button onClick={handleSave} style={{ marginLeft: "auto" }}>
-            Save
+            <SaveIcon />
           </Button>
         </div>
         <div className="navbar-item project-name">{name}</div>
