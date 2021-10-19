@@ -1,13 +1,24 @@
 import React, { useState, useEffect } from "react";
-import Editor from "./Editor";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import Button from "@mui/material/Button";
 
+import Editor from "./Editor";
+import { createPen, updatePen } from "../../actions/pen";
 import "./styles.css";
 
 const Pen = () => {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const { name, pen } = useSelector((state) => state.pen);
   const [html, setHtml] = useState("");
   const [css, setCss] = useState("");
   const [js, setJs] = useState("");
   const [srcDoc, setSrcDoc] = useState("");
+
+  useEffect(() => {
+    if (!name) history.push("/");
+  }, [name, history]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -22,14 +33,33 @@ const Pen = () => {
     return () => clearTimeout(timeout);
   }, [html, css, js]);
 
+  const handleSave = () => {
+    if (!pen) {
+      dispatch(createPen({ name, html, css, js }));
+    } else {
+      dispatch(
+        updatePen(pen._id, {
+          name,
+          html,
+          css,
+          js,
+          likes: pen.likes,
+          creator: pen.creator,
+        })
+      );
+    }
+  };
+
   return (
     <>
       <nav className="navbar">
         <div className="navbar-item">
           <div>React-Codepen</div>
-          <div style={{ marginLeft: "auto" }}>Save</div>
+          <Button onClick={handleSave} style={{ marginLeft: "auto" }}>
+            Save
+          </Button>
         </div>
-        <div className="navbar-item project-name">Name</div>
+        <div className="navbar-item project-name">{name}</div>
         <div className="navbar-item">
           <div>Like</div>
           <div style={{ marginLeft: "auto" }}>profile</div>
