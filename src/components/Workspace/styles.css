@@ -21,8 +21,18 @@
   flex-basis: 0;
 }
 
+.right-panel {
+  display: flex;
+}
+
+.item {
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+  flex-wrap: 0;
+}
+
 .project-name {
-  color: white;
   justify-content: center;
 }
 
@@ -48,7 +58,6 @@
   display: flex;
   justify-content: space-between;
   background-color: hsl(225, 6%, 13%);
-  color: white;
   font-weight: 600;
   padding: 0.5rem;
   padding-left: 1rem;

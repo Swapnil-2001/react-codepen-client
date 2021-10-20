@@ -5,6 +5,7 @@ import { Link, useHistory } from "react-router-dom";
 import SaveIcon from "@mui/icons-material/Save";
 import EditIcon from "@mui/icons-material/Edit";
 import ClearIcon from "@mui/icons-material/Clear";
+import Avatar from "@mui/material/Avatar";
 
 import Editor from "./Editor";
 import { getPenById, createPen, updatePen } from "../../actions/pen";
@@ -18,7 +19,7 @@ const Pen = ({
   const user = JSON.parse(localStorage.getItem("profile"));
   const history = useHistory();
   const dispatch = useDispatch();
-  const { isLoading, name, pen } = useSelector((state) => state.pen);
+  const { isLoading, name, pen, error } = useSelector((state) => state.pen);
   const [html, setHtml] = useState("Hey There!");
   const [css, setCss] = useState("body {\n  background: white;\n}");
   const [js, setJs] = useState("");
@@ -54,6 +55,10 @@ const Pen = ({
     }, 500);
     return () => clearTimeout(timeout);
   }, [html, css, js]);
+
+  useEffect(() => {
+    if (error) alert(error.message);
+  }, [error]);
 
   const handleChange = (e) => {
     const { value } = e.target;
@@ -162,9 +167,10 @@ const Pen = ({
             </>
           )}
         </div>
-        <div className="navbar-item">
-          <div>Like</div>
-          <div style={{ marginLeft: "auto" }}>profile</div>
+        <div className="navbar-item right-panel">
+          <div className="item">Like</div>
+          <div className="item">Settings</div>
+          <div className="item">profile</div>
         </div>
       </nav>
       <div className="pane top-pane">

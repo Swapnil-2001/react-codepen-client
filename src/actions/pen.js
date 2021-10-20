@@ -3,6 +3,7 @@ import {
   STOP_LOADING_POST,
   SET_ALL_PENS,
   SET_PEN,
+  SET_ERROR,
 } from "../constants/actionTypes";
 import * as api from "../api/index.js";
 
@@ -29,7 +30,8 @@ export const getPenById = (id) => async (dispatch) => {
 export const createPen = (penData, history) => async (dispatch) => {
   try {
     const { data } = await api.createPen(penData);
-    dispatch({ type: SET_PEN, data });
+    if (data.message === "Expired") dispatch({ type: SET_ERROR, error: data });
+    else dispatch({ type: SET_PEN, data });
     history.push(`/pen/${data._id}`);
   } catch (error) {
     console.log(error);
@@ -39,7 +41,8 @@ export const createPen = (penData, history) => async (dispatch) => {
 export const updatePen = (id, penData) => async (dispatch) => {
   try {
     const { data } = await api.updatePen(id, penData);
-    dispatch({ type: SET_PEN, data });
+    if (data.message === "Expired") dispatch({ type: SET_ERROR, error: data });
+    else dispatch({ type: SET_PEN, data });
   } catch (error) {
     console.log(error);
   }

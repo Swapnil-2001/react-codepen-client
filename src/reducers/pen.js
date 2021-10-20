@@ -4,10 +4,11 @@ import {
   SET_ALL_PENS,
   SET_PEN,
   SET_NAME,
+  SET_ERROR,
 } from "../constants/actionTypes";
 
 const reducer = (
-  state = { isLoading: false, name: "", pen: null, allPens: [] },
+  state = { isLoading: false, name: "", pen: null, allPens: [], error: null },
   action
 ) => {
   switch (action.type) {
@@ -21,6 +22,8 @@ const reducer = (
       return { ...state, name: action.data?.name, pen: action.data };
     case SET_NAME:
       return { ...state, name: action.name };
+    case SET_ERROR:
+      return { ...state, error: action.error };
     default:
       return state;
   }
