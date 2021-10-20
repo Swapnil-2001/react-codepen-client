@@ -6,6 +6,8 @@ import SaveIcon from "@mui/icons-material/Save";
 import EditIcon from "@mui/icons-material/Edit";
 import ClearIcon from "@mui/icons-material/Clear";
 import Avatar from "@mui/material/Avatar";
+import SettingsIcon from "@mui/icons-material/Settings";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 import Editor from "./Editor";
 import { getPenById, createPen, updatePen } from "../../actions/pen";
@@ -29,10 +31,14 @@ const Pen = ({
   const [editableName, setEditableName] = useState(name);
 
   useEffect(() => {
+    if (error) alert(error.message);
+  }, [user, error, history]);
+
+  useEffect(() => {
     if (id !== "new") {
       dispatch(getPenById(id));
-    } else if (!name) history.push("/");
-  }, [dispatch, id, history, name]);
+    }
+  }, [dispatch, id]);
 
   useEffect(() => {
     if (pen && id !== "new") {
@@ -41,7 +47,8 @@ const Pen = ({
       setJs(pen.js);
     }
     if (name) setEditableName(name);
-  }, [pen, name, id]);
+    else if (id === "new") history.push("/");
+  }, [pen, name, id, history]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -56,16 +63,16 @@ const Pen = ({
     return () => clearTimeout(timeout);
   }, [html, css, js]);
 
-  useEffect(() => {
-    if (error) alert(error.message);
-  }, [error]);
-
   const handleChange = (e) => {
     const { value } = e.target;
     setEditableName(value.length > 10 ? value.substring(0, 10) : value);
   };
 
   const handleSave = () => {
+    if (!user) {
+      history.push("/login");
+      return;
+    }
     if (id === "new") {
       dispatch(createPen({ name, html, css, js }, history));
     } else {
@@ -131,46 +138,61 @@ const Pen = ({
           />
         </div>
         <div className="navbar-item project-name">
-          {pen?.creator === user?.result?._id && editName ? (
-            <>
-              <input
-                className="name-input"
-                value={editableName}
-                onKeyPress={handleNameChange}
-                onChange={handleChange}
-              />
-              <ClearIcon
-                style={{
-                  fontSize: 20,
-                  margin: "auto 0",
-                  marginLeft: "5px",
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  setEditName(false);
-                  setEditableName(name);
-                }}
-              />
-            </>
+          {pen?.creator === user?.result?._id ? (
+            editName ? (
+              <>
+                <input
+                  className="name-input"
+                  value={editableName}
+                  onKeyPress={handleNameChange}
+                  onChange={handleChange}
+                />
+                <ClearIcon
+                  style={{
+                    fontSize: 20,
+                    margin: "auto 0",
+                    marginLeft: "5px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    setEditName(false);
+                    setEditableName(name);
+                  }}
+                />
+              </>
+            ) : (
+              <>
+                {name}
+                <EditIcon
+                  style={{
+                    fontSize: 20,
+                    margin: "auto 0",
+                    marginLeft: "5px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => setEditName(true)}
+                />
+              </>
+            )
           ) : (
-            <>
-              {name}
-              <EditIcon
-                style={{
-                  fontSize: 20,
-                  margin: "auto 0",
-                  marginLeft: "5px",
-                  cursor: "pointer",
-                }}
-                onClick={() => setEditName(true)}
-              />
-            </>
+            <>{name}</>
           )}
         </div>
         <div className="navbar-item right-panel">
-          <div className="item">Like</div>
-          <div className="item">Settings</div>
-          <div className="item">profile</div>
+          <div className="item">
+            <FavoriteBorderIcon />
+          </div>
+          <div className="item">
+            <SettingsIcon />
+          </div>
+          <div className="item">
+            <Avatar
+              style={{ backgroundColor: "#5C7AEA" }}
+              sx={{ width: 35, height: 35 }}
+            >
+              {user?.result?.username.charAt(0)}
+            </Avatar>
+          </div>
         </div>
       </nav>
       <div className="pane top-pane">
