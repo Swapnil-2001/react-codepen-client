@@ -10,6 +10,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 import Editor from "./Editor";
+import Settings from "./Settings";
 import { getPenById, createPen, updatePen } from "../../actions/pen";
 import "./styles.css";
 
@@ -29,6 +30,8 @@ const Pen = ({
 
   const [editName, setEditName] = useState(false);
   const [editableName, setEditableName] = useState(name);
+
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     if (error) alert(error.message);
@@ -132,10 +135,9 @@ const Pen = ({
           >
             React-Codepen
           </Link>
-          <SaveIcon
-            onClick={handleSave}
-            style={{ cursor: "pointer", marginLeft: "auto", color: "white" }}
-          />
+          <div onClick={handleSave} className="save-div">
+            <SaveIcon style={{ color: "white" }} />
+          </div>
         </div>
         <div className="navbar-item project-name">
           {pen?.creator === user?.result?._id ? (
@@ -183,7 +185,10 @@ const Pen = ({
             <FavoriteBorderIcon />
           </div>
           <div className="item">
-            <SettingsIcon />
+            <SettingsIcon
+              style={{ cursor: "pointer" }}
+              onClick={() => setOpenModal(true)}
+            />
           </div>
           <div className="item">
             <Avatar
@@ -215,6 +220,7 @@ const Pen = ({
           onChange={setJs}
         />
       </div>
+      <Settings openModal={openModal} setOpenModal={setOpenModal} />
       <div className="pane">
         <iframe
           srcDoc={srcDoc}
