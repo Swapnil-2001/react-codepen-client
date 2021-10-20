@@ -19,13 +19,13 @@ const Pen = ({
   const history = useHistory();
   const dispatch = useDispatch();
   const { isLoading, name, pen } = useSelector((state) => state.pen);
-  const [editableName, setEditableName] = useState(name);
   const [html, setHtml] = useState("Hey There!");
   const [css, setCss] = useState("body {\n  background: white;\n}");
   const [js, setJs] = useState("");
   const [srcDoc, setSrcDoc] = useState("");
 
   const [editName, setEditName] = useState(false);
+  const [editableName, setEditableName] = useState(name);
 
   useEffect(() => {
     if (id !== "new") {
@@ -67,7 +67,7 @@ const Pen = ({
       if (user?.result?._id === pen.creator) {
         dispatch(
           updatePen(pen._id, {
-            name,
+            name: editableName,
             html,
             css,
             js,
@@ -77,6 +77,16 @@ const Pen = ({
         );
       } else {
         dispatch(createPen({ name, html, css, js }, history));
+      }
+    }
+  };
+
+  const handleNameChange = (e) => {
+    if (e.key === "Enter") {
+      if (editableName === "") alert("Name cannot be empty.");
+      else {
+        handleSave();
+        setEditName(false);
       }
     }
   };
@@ -121,9 +131,7 @@ const Pen = ({
               <input
                 className="name-input"
                 value={editableName}
-                onKeyPress={(e) => {
-                  if (e.key === "Enter") alert("Enter pressed");
-                }}
+                onKeyPress={handleNameChange}
                 onChange={handleChange}
               />
               <ClearIcon
