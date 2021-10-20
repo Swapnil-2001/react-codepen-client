@@ -25,14 +25,26 @@ const style = {
 const Home = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+  const user = JSON.parse(localStorage.getItem("profile"));
   const { allPens } = useSelector((state) => state.pen);
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const classes = useStyles();
 
   useEffect(() => {
+    if (!user) {
+      history.push("/login");
+    }
+  }, [user, history]);
+
+  useEffect(() => {
     dispatch(getAllPens());
   }, [dispatch]);
+
+  const handleNameAdd = (e) => {
+    const { value } = e.target;
+    setName(value.length > 10 ? value.substring(0, 10) : value);
+  };
 
   const handleClick = () => {
     dispatch({ type: SET_NAME, name });
@@ -88,8 +100,8 @@ const Home = () => {
           <TextField
             value={name}
             style={{ width: "100%" }}
-            onChange={(e) => setName(e.target.value)}
-            label="Name"
+            onChange={handleNameAdd}
+            label="Name (<=10 Characters)"
             variant="outlined"
           />
           <Button

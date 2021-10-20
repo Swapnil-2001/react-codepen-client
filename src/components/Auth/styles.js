@@ -5,10 +5,8 @@ export default makeStyles(() => ({
     fontSize: "1.2rem",
     width: "30%",
     margin: "15px 0",
-    outline: "none",
     padding: "20px",
     background: "#334756",
-    border: "none",
     borderRadius: "10px",
     color: "white",
     "&::-webkit-input-placeholder": {
