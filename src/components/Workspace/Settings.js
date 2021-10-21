@@ -3,7 +3,7 @@ import Modal from "@mui/material/Modal";
 import { useDispatch, useSelector } from "react-redux";
 // import Button from "@mui/material/Button";
 
-import { SET_FONT_SIZE } from "../../constants/actionTypes";
+import { SET_FONT_SIZE, SET_THEME } from "../../constants/actionTypes";
 
 import "./styles.css";
 
@@ -56,10 +56,23 @@ const Settings = ({ openModal, setOpenModal }) => {
           <div className="option">
             <p>Theme</p>
             <div class="dropdown">
-              <p>Mouse over me</p>
+              <p>{currentUser?.theme}</p>
               <div class="dropdown-content">
-                <p>Hello World!</p>
-                <p>Hello World!</p>
+                <p onClick={() => dispatch({ type: SET_THEME, data: "night" })}>
+                  night
+                </p>
+                <p
+                  onClick={() =>
+                    dispatch({ type: SET_THEME, data: "material" })
+                  }
+                >
+                  material
+                </p>
+                <p
+                  onClick={() => dispatch({ type: SET_THEME, data: "monokai" })}
+                >
+                  monokai
+                </p>
               </div>
             </div>
           </div>

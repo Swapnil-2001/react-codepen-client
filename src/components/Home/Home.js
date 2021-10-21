@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import useStyles from "./styles";
 import { getAllPens } from "../../actions/pen";
@@ -86,7 +87,16 @@ const Home = () => {
                 height="100%"
               />
             </div>
-            <p>{pen.name}</p>
+            <div className={classes.info__div}>
+              <p>
+                {pen.name}, by {pen.creatorUsername}
+              </p>
+              {pen.creator === user?.result?._id && (
+                <span name="delete-span">
+                  <DeleteIcon style={{ color: "#FF5C58" }} />
+                </span>
+              )}
+            </div>
           </div>
         ))}
       </div>

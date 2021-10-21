@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material.css";
-import "codemirror/theme/midnight.css";
+import "codemirror/theme/monokai.css";
+import "codemirror/theme/night.css";
 import "codemirror/mode/xml/xml";
 import "codemirror/mode/css/css";
 import "codemirror/mode/javascript/javascript";
@@ -39,7 +40,7 @@ const Editor = ({ displayName, language, value, onChange }) => {
           lint: true,
           mode: language,
           lineNumbers: true,
-          theme: "material",
+          theme: `${currentUser?.theme || "material"}`,
           scrollbarStyle: "null",
         }}
       />

@@ -4,6 +4,7 @@ import {
   SET_ALL_PENS,
   SET_PEN,
   SET_ERROR,
+  SET_SAVED,
 } from "../constants/actionTypes";
 import * as api from "../api/index.js";
 
@@ -31,18 +32,28 @@ export const createPen = (penData, history) => async (dispatch) => {
   try {
     const { data } = await api.createPen(penData);
     if (data.message === "Expired") dispatch({ type: SET_ERROR, error: data });
-    else dispatch({ type: SET_PEN, data });
+    else {
+      dispatch({ type: SET_PEN, data });
+      dispatch({ type: SET_ERROR, error: null });
+    }
     history.push(`/pen/${data._id}`);
   } catch (error) {
     console.log(error);
   }
 };
 
-export const updatePen = (id, penData) => async (dispatch) => {
+export const updatePen = (id, penData, history) => async (dispatch) => {
   try {
     const { data } = await api.updatePen(id, penData);
-    if (data.message === "Expired") dispatch({ type: SET_ERROR, error: data });
-    else dispatch({ type: SET_PEN, data });
+    if (data.message) {
+      dispatch({ type: SET_ERROR, error: data });
+      history.push("/login");
+    } else {
+      dispatch({ type: SET_SAVED, status: true });
+      dispatch({ type: SET_PEN, data });
+      dispatch({ type: SET_ERROR, error: null });
+      dispatch({ type: SET_SAVED, status: false });
+    }
   } catch (error) {
     console.log(error);
   }

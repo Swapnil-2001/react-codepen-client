@@ -8,12 +8,14 @@ import ClearIcon from "@mui/icons-material/Clear";
 import Avatar from "@mui/material/Avatar";
 import SettingsIcon from "@mui/icons-material/Settings";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { store } from "react-notifications-component";
 
 import Editor from "./Editor";
 import Settings from "./Settings";
 import { getUser } from "../../actions/auth";
 import { getPenById, createPen, updatePen } from "../../actions/pen";
 import "./styles.css";
+import "react-notifications-component/dist/theme.css";
 
 const Pen = ({
   match: {
@@ -24,7 +26,9 @@ const Pen = ({
   const history = useHistory();
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.auth);
-  const { isLoading, name, pen, error } = useSelector((state) => state.pen);
+  const { isLoading, name, pen, error, saved } = useSelector(
+    (state) => state.pen
+  );
   const [html, setHtml] = useState("Hey There!");
   const [css, setCss] = useState("body {\n  background: white;\n}");
   const [js, setJs] = useState("");
@@ -39,6 +43,25 @@ const Pen = ({
     if (error) alert(error.message);
     if (user && !currentUser) dispatch(getUser(user?.result?.username));
   }, [user, dispatch, currentUser, error, history]);
+
+  useEffect(() => {
+    if (saved) {
+      store.addNotification({
+        title: "Keep going!",
+        message: "Changes saved.",
+        className: "notification-container",
+        type: "default",
+        insert: "top",
+        container: "top-center",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+          duration: 1500,
+          onScreen: true,
+        },
+      });
+    }
+  }, [saved]);
 
   useEffect(() => {
     if (id !== "new") {
@@ -65,7 +88,7 @@ const Pen = ({
           <script>${js}</script>
         </html>
       `);
-    }, 500);
+    }, 600);
     return () => clearTimeout(timeout);
   }, [html, css, js]);
 
@@ -89,15 +112,19 @@ const Pen = ({
     } else {
       if (user?.result?._id === pen.creator) {
         dispatch(
-          updatePen(pen._id, {
-            name: editableName,
-            html,
-            css,
-            js,
-            likes: pen.likes,
-            creator: pen.creator,
-            creatorUsername: pen.creatorUsername,
-          })
+          updatePen(
+            pen._id,
+            {
+              name: editableName,
+              html,
+              css,
+              js,
+              likes: pen.likes,
+              creator: pen.creator,
+              creatorUsername: pen.creatorUsername,
+            },
+            history
+          )
         );
       } else {
         dispatch(createPen({ name, html, css, js }, history));

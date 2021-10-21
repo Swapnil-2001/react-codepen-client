@@ -12,7 +12,6 @@ export default makeStyles(() => ({
   },
   thumbnail: {
     width: "30%",
-    textAlign: "center",
     background: "hsl(225, 6%, 30%)",
     color: "white",
     margin: "10px",
@@ -24,12 +23,20 @@ export default makeStyles(() => ({
       background: "hsl(225, 6%, 35%)",
       cursor: "pointer",
     },
+  },
+  info__div: {
+    display: "flex",
+    padding: "20px 0",
     "& p": {
       margin: "auto 0",
-      padding: "15px 0",
+      fontWeight: "700",
+    },
+    "& span": {
+      marginLeft: "auto",
     },
   },
   frame: {
+    cursor: "pointer",
     height: "30vh",
   },
 }));

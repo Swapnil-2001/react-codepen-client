@@ -5,10 +5,18 @@ import {
   SET_PEN,
   SET_NAME,
   SET_ERROR,
+  SET_SAVED,
 } from "../constants/actionTypes";
 
 const reducer = (
-  state = { isLoading: false, name: "", pen: null, allPens: [], error: null },
+  state = {
+    isLoading: false,
+    name: "",
+    pen: null,
+    allPens: [],
+    error: null,
+    saved: false,
+  },
   action
 ) => {
   switch (action.type) {
@@ -24,6 +32,8 @@ const reducer = (
       return { ...state, name: action.name };
     case SET_ERROR:
       return { ...state, error: action.error };
+    case SET_SAVED:
+      return { ...state, saved: action.status };
     default:
       return state;
   }
