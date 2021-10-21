@@ -8,12 +8,13 @@ import ClearIcon from "@mui/icons-material/Clear";
 import Avatar from "@mui/material/Avatar";
 import SettingsIcon from "@mui/icons-material/Settings";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import { store } from "react-notifications-component";
 
 import Editor from "./Editor";
 import Settings from "./Settings";
 import { getUser } from "../../actions/auth";
-import { getPenById, createPen, updatePen } from "../../actions/pen";
+import { getPenById, createPen, updatePen, likePen } from "../../actions/pen";
 import "./styles.css";
 import "react-notifications-component/dist/theme.css";
 
@@ -49,7 +50,6 @@ const Pen = ({
       store.addNotification({
         title: "Keep going!",
         message: "Changes saved.",
-        className: "notification-container",
         type: "default",
         insert: "top",
         container: "top-center",
@@ -58,6 +58,7 @@ const Pen = ({
         dismiss: {
           duration: 1500,
           onScreen: true,
+          pauseOnHover: true,
         },
       });
     }
@@ -217,8 +218,16 @@ const Pen = ({
           )}
         </div>
         <div className="navbar-item right-panel">
-          <div className="item">
-            <FavoriteBorderIcon />
+          <div
+            onClick={() => dispatch(likePen(pen?._id))}
+            className="item like-div"
+          >
+            {pen?.likes.includes(user?.result?._id) ? (
+              <FavoriteIcon style={{ marginRight: "7px" }} />
+            ) : (
+              <FavoriteBorderIcon style={{ marginRight: "7px" }} />
+            )}
+            {pen?.likes.length}
           </div>
           <div className="item">
             <SettingsIcon

@@ -35,9 +35,9 @@ const Settings = ({ openModal, setOpenModal }) => {
         <div style={style}>
           <div className="option">
             <p>Font Size</p>
-            <div class="dropdown">
+            <div className="dropdown">
               <p>{currentUser?.fontSize}px</p>
-              <div class="dropdown-content">
+              <div className="dropdown-content">
                 <p onClick={() => dispatch({ type: SET_FONT_SIZE, data: 12 })}>
                   12px
                 </p>
@@ -72,6 +72,11 @@ const Settings = ({ openModal, setOpenModal }) => {
                   onClick={() => dispatch({ type: SET_THEME, data: "monokai" })}
                 >
                   monokai
+                </p>
+                <p
+                  onClick={() => dispatch({ type: SET_THEME, data: "default" })}
+                >
+                  default (light)
                 </p>
               </div>
             </div>

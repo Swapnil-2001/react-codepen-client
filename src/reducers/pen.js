@@ -6,6 +6,7 @@ import {
   SET_NAME,
   SET_ERROR,
   SET_SAVED,
+  LIKE_PEN,
 } from "../constants/actionTypes";
 
 const reducer = (
@@ -34,6 +35,14 @@ const reducer = (
       return { ...state, error: action.error };
     case SET_SAVED:
       return { ...state, saved: action.status };
+    case LIKE_PEN:
+      return {
+        ...state,
+        pen: action.payload,
+        allPens: state.allPens.map((p) =>
+          p._id === action.payload._id ? action.payload : p
+        ),
+      };
     default:
       return state;
   }

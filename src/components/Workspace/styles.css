@@ -113,8 +113,13 @@
   margin: 50px 100px;
 }
 
-.notification-container {
-  text-align: center;
+.like-div {
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.like-div:hover {
+  background-color: #423f3e;
 }
 
 .dropdown {

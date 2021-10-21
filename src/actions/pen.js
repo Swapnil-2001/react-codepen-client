@@ -5,6 +5,7 @@ import {
   SET_PEN,
   SET_ERROR,
   SET_SAVED,
+  LIKE_PEN,
 } from "../constants/actionTypes";
 import * as api from "../api/index.js";
 
@@ -54,6 +55,15 @@ export const updatePen = (id, penData, history) => async (dispatch) => {
       dispatch({ type: SET_ERROR, error: null });
       dispatch({ type: SET_SAVED, status: false });
     }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const likePen = (id) => async (dispatch) => {
+  try {
+    const { data } = await api.likePen(id);
+    dispatch({ type: LIKE_PEN, payload: data });
   } catch (error) {
     console.log(error);
   }
