@@ -11,6 +11,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 import Editor from "./Editor";
 import Settings from "./Settings";
+import { getUser } from "../../actions/auth";
 import { getPenById, createPen, updatePen } from "../../actions/pen";
 import "./styles.css";
 
@@ -22,6 +23,7 @@ const Pen = ({
   const user = JSON.parse(localStorage.getItem("profile"));
   const history = useHistory();
   const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.auth);
   const { isLoading, name, pen, error } = useSelector((state) => state.pen);
   const [html, setHtml] = useState("Hey There!");
   const [css, setCss] = useState("body {\n  background: white;\n}");
@@ -35,7 +37,8 @@ const Pen = ({
 
   useEffect(() => {
     if (error) alert(error.message);
-  }, [user, error, history]);
+    if (user && !currentUser) dispatch(getUser(user?.result?.username));
+  }, [user, dispatch, currentUser, error, history]);
 
   useEffect(() => {
     if (id !== "new") {
@@ -77,7 +80,12 @@ const Pen = ({
       return;
     }
     if (id === "new") {
-      dispatch(createPen({ name, html, css, js }, history));
+      dispatch(
+        createPen(
+          { name, creatorUsername: user?.result?.username, html, css, js },
+          history
+        )
+      );
     } else {
       if (user?.result?._id === pen.creator) {
         dispatch(
@@ -88,6 +96,7 @@ const Pen = ({
             js,
             likes: pen.likes,
             creator: pen.creator,
+            creatorUsername: pen.creatorUsername,
           })
         );
       } else {

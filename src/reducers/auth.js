@@ -1,13 +1,15 @@
-import { AUTH, LOGOUT } from "../constants/actionTypes";
+import { AUTH, LOGOUT, SET_USER } from "../constants/actionTypes";
 
-const reducer = (state = { user: null, isLoading: false }, action) => {
+const reducer = (state = { currentUser: null, isLoading: false }, action) => {
   switch (action.type) {
     case AUTH:
       localStorage.setItem("profile", JSON.stringify(action.data));
-      return { ...state, user: action.data, isLoading: false };
+      return { ...state, currentUser: action.data, isLoading: false };
     case LOGOUT:
       localStorage.clear();
-      return { ...state, user: null, isLoading: false };
+      return { ...state, currentUser: null, isLoading: false };
+    case SET_USER:
+      return { ...state, currentUser: action.data };
     default:
       return state;
   }
