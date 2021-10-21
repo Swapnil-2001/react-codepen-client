@@ -1,6 +1,9 @@
 import React from "react";
 import Modal from "@mui/material/Modal";
+import { useDispatch, useSelector } from "react-redux";
 // import Button from "@mui/material/Button";
+
+import { SET_FONT_SIZE } from "../../constants/actionTypes";
 
 import "./styles.css";
 
@@ -19,6 +22,8 @@ const style = {
 };
 
 const Settings = ({ openModal, setOpenModal }) => {
+  const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.auth);
   return (
     <div>
       <Modal
@@ -31,10 +36,20 @@ const Settings = ({ openModal, setOpenModal }) => {
           <div className="option">
             <p>Font Size</p>
             <div class="dropdown">
-              <p>Mouse over me</p>
+              <p>{currentUser?.fontSize}px</p>
               <div class="dropdown-content">
-                <p>Hello World!</p>
-                <p>Hello World!</p>
+                <p onClick={() => dispatch({ type: SET_FONT_SIZE, data: 12 })}>
+                  12px
+                </p>
+                <p onClick={() => dispatch({ type: SET_FONT_SIZE, data: 14 })}>
+                  14px
+                </p>
+                <p onClick={() => dispatch({ type: SET_FONT_SIZE, data: 16 })}>
+                  16px
+                </p>
+                <p onClick={() => dispatch({ type: SET_FONT_SIZE, data: 18 })}>
+                  18px
+                </p>
               </div>
             </div>
           </div>

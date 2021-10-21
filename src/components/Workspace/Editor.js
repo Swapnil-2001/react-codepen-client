@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material.css";
 import "codemirror/theme/midnight.css";
@@ -16,6 +17,7 @@ const Editor = ({ displayName, language, value, onChange }) => {
     onChange(value);
   };
   const [open, setOpen] = useState(true);
+  const { currentUser } = useSelector((state) => state.auth);
   return (
     <div className={`editor-container ${open ? "" : "collapsed"}`}>
       <div className="editor-title">
@@ -31,7 +33,7 @@ const Editor = ({ displayName, language, value, onChange }) => {
       <ControlledEditor
         onBeforeChange={handleChange}
         value={value}
-        className="codemirror-wrapper"
+        className={`codemirror-wrapper fs-${currentUser?.fontSize}`}
         options={{
           lineWrapping: true,
           lint: true,

@@ -1,6 +1,7 @@
 export const AUTH = "AUTH";
 export const LOGOUT = "LOGOUT";
 export const SET_USER = "SET_USER";
+export const SET_FONT_SIZE = "SET_FONT_SIZE";
 
 export const START_LOADING_POST = "START_LOADING_POST";
 export const SET_ERROR = "SET_ERROR";
