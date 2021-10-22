@@ -10,7 +10,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 
 import { likePen } from "../../actions/pen";
-import "./styles.css";
+import "./navbar.css";
 import "react-notifications-component/dist/theme.css";
 
 const Navbar = ({ newName, setNewName, id, handlePenSave, setOpenModal }) => {
@@ -116,12 +116,21 @@ const Navbar = ({ newName, setNewName, id, handlePenSave, setOpenModal }) => {
           }}
           className="item like-div"
         >
-          {user && pen?.likes.includes(user.result?._id) ? (
-            <FavoriteIcon style={{ marginRight: "7px" }} />
+          {id !== "new" ? (
+            user && pen?.likes.includes(user.result?._id) ? (
+              <>
+                <FavoriteIcon style={{ marginRight: "7px" }} />
+                {pen?.likes.length}
+              </>
+            ) : (
+              <>
+                <FavoriteBorderIcon style={{ marginRight: "7px" }} />
+                {pen?.likes.length}
+              </>
+            )
           ) : (
-            <FavoriteBorderIcon style={{ marginRight: "7px" }} />
+            <div>Liking enabled once you save.</div>
           )}
-          {pen?.likes.length}
         </div>
         <div className="item">
           <SettingsIcon

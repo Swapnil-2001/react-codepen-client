@@ -1,0 +1,14 @@
+.loading-div {
+  display: flex;
+  justify-content: center;
+  margin-top: 75px;
+}
+
+.pane {
+  height: 50vh;
+  display: flex;
+}
+
+.top-pane {
+  background-color: hsl(225, 6%, 25%);
+}

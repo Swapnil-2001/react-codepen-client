@@ -11,10 +11,10 @@ import { Controlled as ControlledEditor } from "react-codemirror2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCompressAlt, faExpandAlt } from "@fortawesome/free-solid-svg-icons";
 
-import "./styles.css";
+import "./editor.css";
 
 const Editor = ({ displayName, language, value, onChange }) => {
-  const handleChange = (editor, data, value) => {
+  const handleChange = (_, __, value) => {
     onChange(value);
   };
   const [open, setOpen] = useState(true);
@@ -39,7 +39,7 @@ const Editor = ({ displayName, language, value, onChange }) => {
           lineWrapping: true,
           lint: true,
           mode: language,
-          lineNumbers: true,
+          lineNumbers: currentUser?.lineNumbers,
           theme: `${currentUser?.theme || "material"}`,
           scrollbarStyle: "null",
         }}

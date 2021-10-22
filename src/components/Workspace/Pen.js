@@ -9,7 +9,7 @@ import Editor from "./Editor";
 import Settings from "./Settings";
 import { getUser } from "../../actions/auth";
 import { getPenById, createPen, updatePen } from "../../actions/pen";
-import "./styles.css";
+import "./pen.css";
 import "react-notifications-component/dist/theme.css";
 
 const Pen = ({
@@ -121,13 +121,7 @@ const Pen = ({
 
   if (isLoading)
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          marginTop: "75px",
-        }}
-      >
+      <div className="loading-div">
         <CircularProgress style={{ color: "white" }} />
       </div>
     );

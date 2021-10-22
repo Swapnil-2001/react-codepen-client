@@ -3,6 +3,7 @@ export const LOGOUT = "LOGOUT";
 export const SET_USER = "SET_USER";
 export const SET_FONT_SIZE = "SET_FONT_SIZE";
 export const SET_THEME = "SET_THEME";
+export const SET_LINE_NUMBERS = "SET_LINE_NUMBERS";
 
 export const START_LOADING_POST = "START_LOADING_POST";
 export const SET_ERROR = "SET_ERROR";

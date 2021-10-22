@@ -1,25 +1,38 @@
 import React from "react";
 import Modal from "@mui/material/Modal";
 import { useDispatch, useSelector } from "react-redux";
-// import Button from "@mui/material/Button";
+import Switch from "@mui/material/Switch";
+import { styled } from "@mui/material/styles";
 
-import { SET_FONT_SIZE, SET_THEME } from "../../constants/actionTypes";
+import {
+  SET_FONT_SIZE,
+  SET_THEME,
+  SET_LINE_NUMBERS,
+} from "../../constants/actionTypes";
 
-import "./styles.css";
+import "./settings.css";
 
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "600px",
+  width: "350px",
   backgroundColor: "#334756",
   borderRadius: "10px",
-  height: "50vh",
   outline: "none",
   boxShadow: 24,
   p: 4,
 };
+
+const CustomSwitch = styled(Switch)(({ theme }) => ({
+  "& .MuiSwitch-switchBase.Mui-checked": {
+    color: "#5C7AEA",
+  },
+  "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+    backgroundColor: "#5C7AEA",
+  },
+}));
 
 const Settings = ({ openModal, setOpenModal }) => {
   const dispatch = useDispatch();
@@ -32,7 +45,7 @@ const Settings = ({ openModal, setOpenModal }) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <div style={style}>
+        <div className="modal-wrapper" style={style}>
           <div className="option">
             <p>Font Size</p>
             <div className="dropdown">
@@ -55,9 +68,9 @@ const Settings = ({ openModal, setOpenModal }) => {
           </div>
           <div className="option">
             <p>Theme</p>
-            <div class="dropdown">
+            <div className="dropdown">
               <p>{currentUser?.theme}</p>
-              <div class="dropdown-content">
+              <div className="dropdown-content">
                 <p onClick={() => dispatch({ type: SET_THEME, data: "night" })}>
                   night
                 </p>
@@ -79,6 +92,18 @@ const Settings = ({ openModal, setOpenModal }) => {
                   default (light)
                 </p>
               </div>
+            </div>
+          </div>
+          <div className="option">
+            <p>Line Numbering</p>
+            <div className="lineNumbers-div">
+              <CustomSwitch
+                checked={currentUser?.lineNumbers}
+                onChange={(e) =>
+                  dispatch({ type: SET_LINE_NUMBERS, data: e.target.checked })
+                }
+                inputProps={{ "aria-label": "controlled" }}
+              />
             </div>
           </div>
         </div>

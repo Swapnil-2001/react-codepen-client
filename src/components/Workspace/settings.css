@@ -1,0 +1,47 @@
+.modal-wrapper {
+  padding: 50px 100px;
+}
+
+.option {
+  display: flex;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.lineNumbers-div {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  margin-right: -10px;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: -21px;
+  text-align: center;
+  font-size: 15px;
+  min-width: 50px;
+  background-color: #082032;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-content p {
+  padding: 15px 20px;
+  transition: background-color 0.3s;
+  margin: 0;
+}
+
+.dropdown-content p:hover {
+  background-color: #3d56b2;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
