@@ -26,23 +26,30 @@ const Pen = ({
   const user = JSON.parse(localStorage.getItem("profile"));
   const history = useHistory();
   const dispatch = useDispatch();
+
   const { currentUser } = useSelector((state) => state.auth);
+  // have name separately because "pen" is not set until a new project is saved
   const { isLoading, name, pen, error, saved } = useSelector(
     (state) => state.pen
   );
+
   const [html, setHtml] = useState("Hey There!");
   const [css, setCss] = useState("body {\n  background: white;\n}");
   const [js, setJs] = useState("");
   const [srcDoc, setSrcDoc] = useState("");
 
   const [editName, setEditName] = useState(false);
-  const [editableName, setEditableName] = useState(name);
+  // checks if name is being edited or not; accordingly have "name" as input / div
+  const [newName, setNewName] = useState(name);
+  // sets the name after editName === true
 
   const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
+    // primarily handles user trying to save after session has expired
     if (error) alert(error.message);
-    if (user && !currentUser) dispatch(getUser(user?.result?.username));
+    // in case of page refresh; localStorage remains unaffected
+    if (user && !currentUser) dispatch(getUser(user.result?.username));
   }, [user, dispatch, currentUser, error, history]);
 
   useEffect(() => {
@@ -76,7 +83,8 @@ const Pen = ({
       setCss(pen.css);
       setJs(pen.js);
     }
-    if (name) setEditableName(name);
+    if (name) setNewName(name);
+    // if page refreshed before a new pen has been saved to DB
     else if (id === "new") history.push("/");
   }, [pen, name, id, history]);
 
@@ -93,17 +101,19 @@ const Pen = ({
     return () => clearTimeout(timeout);
   }, [html, css, js]);
 
+  // change name of pen
   const handleChange = (e) => {
     const { value } = e.target;
-    setEditableName(value.length > 10 ? value.substring(0, 10) : value);
+    setNewName(value.length > 10 ? value.substring(0, 10) : value);
   };
 
-  const handleSave = () => {
+  const handlePenSave = () => {
     if (!user) {
       history.push("/login");
       return;
     }
     if (id === "new") {
+      // saving for the first time
       dispatch(
         createPen(
           { name, creatorUsername: user?.result?.username, html, css, js },
@@ -113,31 +123,26 @@ const Pen = ({
     } else {
       if (user?.result?._id === pen.creator) {
         dispatch(
-          updatePen(
-            pen._id,
-            {
-              name: editableName,
-              html,
-              css,
-              js,
-              likes: pen.likes,
-              creator: pen.creator,
-              creatorUsername: pen.creatorUsername,
-            },
-            history
-          )
+          updatePen(pen._id, {
+            name: newName,
+            html,
+            css,
+            js,
+            likes: pen.likes,
+            creator: pen.creator,
+            creatorUsername: pen.creatorUsername,
+          })
         );
-      } else {
-        dispatch(createPen({ name, html, css, js }, history));
-      }
+      } else dispatch(createPen({ name, html, css, js }, history));
+      // essentially cloning a project
     }
   };
 
-  const handleNameChange = (e) => {
+  const handleNameSave = (e) => {
     if (e.key === "Enter") {
-      if (editableName === "") alert("Name cannot be empty.");
+      if (newName === "") alert("Name cannot be empty.");
       else {
-        handleSave();
+        handlePenSave();
         setEditName(false);
       }
     }
@@ -172,7 +177,7 @@ const Pen = ({
           >
             React-Codepen
           </Link>
-          <div onClick={handleSave} className="save-div">
+          <div onClick={handlePenSave} className="save-div">
             <SaveIcon style={{ color: "white" }} />
           </div>
         </div>
@@ -182,8 +187,8 @@ const Pen = ({
               <>
                 <input
                   className="name-input"
-                  value={editableName}
-                  onKeyPress={handleNameChange}
+                  value={newName}
+                  onKeyPress={handleNameSave}
                   onChange={handleChange}
                 />
                 <ClearIcon
@@ -195,7 +200,7 @@ const Pen = ({
                   }}
                   onClick={() => {
                     setEditName(false);
-                    setEditableName(name);
+                    setNewName(name);
                   }}
                 />
               </>

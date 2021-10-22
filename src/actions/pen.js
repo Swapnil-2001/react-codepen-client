@@ -32,10 +32,12 @@ export const getPenById = (id) => async (dispatch) => {
 export const createPen = (penData, history) => async (dispatch) => {
   try {
     const { data } = await api.createPen(penData);
-    if (data.message === "Expired") dispatch({ type: SET_ERROR, error: data });
+    if (data.message) dispatch({ type: SET_ERROR, error: data });
     else {
+      dispatch({ type: SET_SAVED, status: true });
       dispatch({ type: SET_PEN, data });
       dispatch({ type: SET_ERROR, error: null });
+      dispatch({ type: SET_SAVED, status: false });
     }
     history.push(`/pen/${data._id}`);
   } catch (error) {
@@ -43,13 +45,11 @@ export const createPen = (penData, history) => async (dispatch) => {
   }
 };
 
-export const updatePen = (id, penData, history) => async (dispatch) => {
+export const updatePen = (id, penData) => async (dispatch) => {
   try {
     const { data } = await api.updatePen(id, penData);
-    if (data.message) {
-      dispatch({ type: SET_ERROR, error: data });
-      history.push("/login");
-    } else {
+    if (data.message) dispatch({ type: SET_ERROR, error: data });
+    else {
       dispatch({ type: SET_SAVED, status: true });
       dispatch({ type: SET_PEN, data });
       dispatch({ type: SET_ERROR, error: null });
