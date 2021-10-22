@@ -32,6 +32,12 @@ const Pen = ({
   const [js, setJs] = useState("");
   const [srcDoc, setSrcDoc] = useState("");
 
+  const [preferences, setPreferences] = useState({
+    fontSize: "14",
+    theme: "material",
+    lineNumbers: true,
+  });
+
   const [newName, setNewName] = useState(name);
   // sets the name after editName === true
 
@@ -57,8 +63,21 @@ const Pen = ({
   }, [saved]);
 
   useEffect(() => {
-    // primarily handles user trying to save after session has expired
-    if (error) alert(error.message);
+    if (error)
+      store.addNotification({
+        title: "Uh oh!",
+        message: error.message,
+        type: "danger",
+        insert: "top",
+        container: "top-center",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+          duration: 2500,
+          onScreen: true,
+          pauseOnHover: true,
+        },
+      });
     // in case of page refresh; localStorage remains unaffected
     if (user && !currentUser) dispatch(getUser(user.result?.username));
   }, [user, dispatch, currentUser, error, history]);
@@ -137,25 +156,33 @@ const Pen = ({
       />
       <div className="pane top-pane">
         <Editor
+          preferences={preferences}
           language="xml"
           displayName="HTML"
           value={html}
           onChange={setHtml}
         />
         <Editor
+          preferences={preferences}
           language="css"
           displayName="CSS"
           value={css}
           onChange={setCss}
         />
         <Editor
+          preferences={preferences}
           language="javascript"
           displayName="JS"
           value={js}
           onChange={setJs}
         />
       </div>
-      <Settings openModal={openModal} setOpenModal={setOpenModal} />
+      <Settings
+        preferences={preferences}
+        setPreferences={setPreferences}
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+      />
       <div className="pane">
         <iframe
           srcDoc={srcDoc}

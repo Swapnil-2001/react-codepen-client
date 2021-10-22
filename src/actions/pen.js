@@ -32,11 +32,12 @@ export const getPenById = (id) => async (dispatch) => {
 export const createPen = (penData, history) => async (dispatch) => {
   try {
     const { data } = await api.createPen(penData);
-    if (data.message) dispatch({ type: SET_ERROR, error: data });
-    else {
+    if (data.message) {
+      dispatch({ type: SET_ERROR, error: data });
+      dispatch({ type: SET_ERROR, error: null });
+    } else {
       dispatch({ type: SET_SAVED, status: true });
       dispatch({ type: SET_PEN, data });
-      dispatch({ type: SET_ERROR, error: null });
       dispatch({ type: SET_SAVED, status: false });
     }
     history.push(`/pen/${data._id}`);
@@ -48,11 +49,12 @@ export const createPen = (penData, history) => async (dispatch) => {
 export const updatePen = (id, penData) => async (dispatch) => {
   try {
     const { data } = await api.updatePen(id, penData);
-    if (data.message) dispatch({ type: SET_ERROR, error: data });
-    else {
+    if (data.message) {
+      dispatch({ type: SET_ERROR, error: data });
+      dispatch({ type: SET_ERROR, error: null });
+    } else {
       dispatch({ type: SET_SAVED, status: true });
       dispatch({ type: SET_PEN, data });
-      dispatch({ type: SET_ERROR, error: null });
       dispatch({ type: SET_SAVED, status: false });
     }
   } catch (error) {
@@ -63,10 +65,11 @@ export const updatePen = (id, penData) => async (dispatch) => {
 export const likePen = (id) => async (dispatch) => {
   try {
     const { data } = await api.likePen(id);
-    if (data.message) dispatch({ type: SET_ERROR, error: data });
-    else {
-      dispatch({ type: LIKE_PEN, payload: data });
+    if (data.message) {
+      dispatch({ type: SET_ERROR, error: data });
       dispatch({ type: SET_ERROR, error: null });
+    } else {
+      dispatch({ type: LIKE_PEN, payload: data });
     }
   } catch (error) {
     console.log(error);

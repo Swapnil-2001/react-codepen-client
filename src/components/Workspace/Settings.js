@@ -1,14 +1,7 @@
 import React from "react";
 import Modal from "@mui/material/Modal";
-import { useDispatch, useSelector } from "react-redux";
 import Switch from "@mui/material/Switch";
 import { styled } from "@mui/material/styles";
-
-import {
-  SET_FONT_SIZE,
-  SET_THEME,
-  SET_LINE_NUMBERS,
-} from "../../constants/actionTypes";
 
 import "./settings.css";
 
@@ -25,7 +18,7 @@ const style = {
   p: 4,
 };
 
-const CustomSwitch = styled(Switch)(({ theme }) => ({
+const CustomSwitch = styled(Switch)(() => ({
   "& .MuiSwitch-switchBase.Mui-checked": {
     color: "#5C7AEA",
   },
@@ -34,9 +27,7 @@ const CustomSwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-const Settings = ({ openModal, setOpenModal }) => {
-  const dispatch = useDispatch();
-  const { currentUser } = useSelector((state) => state.auth);
+const Settings = ({ openModal, setOpenModal, preferences, setPreferences }) => {
   return (
     <div>
       <Modal
@@ -49,18 +40,46 @@ const Settings = ({ openModal, setOpenModal }) => {
           <div className="option">
             <p>Font Size</p>
             <div className="dropdown">
-              <p>{currentUser?.fontSize}px</p>
+              <p>{preferences.fontSize}px</p>
               <div className="dropdown-content">
-                <p onClick={() => dispatch({ type: SET_FONT_SIZE, data: 12 })}>
+                <p
+                  onClick={() =>
+                    setPreferences((prevState) => ({
+                      ...prevState,
+                      fontSize: "12",
+                    }))
+                  }
+                >
                   12px
                 </p>
-                <p onClick={() => dispatch({ type: SET_FONT_SIZE, data: 14 })}>
+                <p
+                  onClick={() =>
+                    setPreferences((prevState) => ({
+                      ...prevState,
+                      fontSize: "14",
+                    }))
+                  }
+                >
                   14px
                 </p>
-                <p onClick={() => dispatch({ type: SET_FONT_SIZE, data: 16 })}>
+                <p
+                  onClick={() =>
+                    setPreferences((prevState) => ({
+                      ...prevState,
+                      fontSize: "16",
+                    }))
+                  }
+                >
                   16px
                 </p>
-                <p onClick={() => dispatch({ type: SET_FONT_SIZE, data: 18 })}>
+                <p
+                  onClick={() =>
+                    setPreferences((prevState) => ({
+                      ...prevState,
+                      fontSize: "18",
+                    }))
+                  }
+                >
                   18px
                 </p>
               </div>
@@ -69,25 +88,45 @@ const Settings = ({ openModal, setOpenModal }) => {
           <div className="option">
             <p>Theme</p>
             <div className="dropdown">
-              <p>{currentUser?.theme}</p>
+              <p>{preferences.theme}</p>
               <div className="dropdown-content">
-                <p onClick={() => dispatch({ type: SET_THEME, data: "night" })}>
+                <p
+                  onClick={() =>
+                    setPreferences((prevState) => ({
+                      ...prevState,
+                      theme: "night",
+                    }))
+                  }
+                >
                   night
                 </p>
                 <p
                   onClick={() =>
-                    dispatch({ type: SET_THEME, data: "material" })
+                    setPreferences((prevState) => ({
+                      ...prevState,
+                      theme: "material",
+                    }))
                   }
                 >
                   material
                 </p>
                 <p
-                  onClick={() => dispatch({ type: SET_THEME, data: "monokai" })}
+                  onClick={() =>
+                    setPreferences((prevState) => ({
+                      ...prevState,
+                      theme: "monokai",
+                    }))
+                  }
                 >
                   monokai
                 </p>
                 <p
-                  onClick={() => dispatch({ type: SET_THEME, data: "default" })}
+                  onClick={() =>
+                    setPreferences((prevState) => ({
+                      ...prevState,
+                      theme: "default",
+                    }))
+                  }
                 >
                   default (light)
                 </p>
@@ -98,9 +137,12 @@ const Settings = ({ openModal, setOpenModal }) => {
             <p>Line Numbering</p>
             <div className="lineNumbers-div">
               <CustomSwitch
-                checked={currentUser?.lineNumbers}
+                checked={preferences.lineNumbers}
                 onChange={(e) =>
-                  dispatch({ type: SET_LINE_NUMBERS, data: e.target.checked })
+                  setPreferences((prevState) => ({
+                    ...prevState,
+                    lineNumbers: e.target.checked,
+                  }))
                 }
                 inputProps={{ "aria-label": "controlled" }}
               />

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material.css";
 import "codemirror/theme/monokai.css";
@@ -13,12 +12,11 @@ import { faCompressAlt, faExpandAlt } from "@fortawesome/free-solid-svg-icons";
 
 import "./editor.css";
 
-const Editor = ({ displayName, language, value, onChange }) => {
+const Editor = ({ preferences, displayName, language, value, onChange }) => {
   const handleChange = (_, __, value) => {
     onChange(value);
   };
   const [open, setOpen] = useState(true);
-  const { currentUser } = useSelector((state) => state.auth);
   return (
     <div className={`editor-container ${open ? "" : "collapsed"}`}>
       <div className="editor-title">
@@ -34,13 +32,13 @@ const Editor = ({ displayName, language, value, onChange }) => {
       <ControlledEditor
         onBeforeChange={handleChange}
         value={value}
-        className={`codemirror-wrapper fs-${currentUser?.fontSize}`}
+        className={`codemirror-wrapper fs-${preferences.fontSize}`}
         options={{
           lineWrapping: true,
           lint: true,
           mode: language,
-          lineNumbers: currentUser?.lineNumbers,
-          theme: `${currentUser?.theme || "material"}`,
+          lineNumbers: preferences.lineNumbers,
+          theme: preferences.theme,
           scrollbarStyle: "null",
         }}
       />

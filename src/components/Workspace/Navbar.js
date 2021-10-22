@@ -4,6 +4,7 @@ import { Link, useHistory } from "react-router-dom";
 import SaveIcon from "@mui/icons-material/Save";
 import EditIcon from "@mui/icons-material/Edit";
 import ClearIcon from "@mui/icons-material/Clear";
+import HomeIcon from "@mui/icons-material/Home";
 import Avatar from "@mui/material/Avatar";
 import SettingsIcon from "@mui/icons-material/Settings";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -53,12 +54,11 @@ const Navbar = ({ newName, setNewName, id, handlePenSave, setOpenModal }) => {
           style={{
             textDecoration: "none",
             fontWeight: "700",
-            margin: "auto 0",
-            marginLeft: "15px",
+            margin: "auto 0 0 30px",
             color: "white",
           }}
         >
-          React-Codepen
+          <HomeIcon />
         </Link>
         <div onClick={handlePenSave} className="save-div">
           <SaveIcon style={{ color: "white" }} />
