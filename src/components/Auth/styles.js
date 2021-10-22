@@ -1,6 +1,10 @@
 import { makeStyles } from "@mui/styles";
 
 export default makeStyles(() => ({
+  heading__div: {
+    textAlign: "center",
+    marginTop: "45px",
+  },
   input: {
     fontSize: "1.2rem",
     width: "30%",
@@ -17,15 +21,9 @@ export default makeStyles(() => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    marginTop: "100px",
+    marginTop: "30px",
     "& p": {
       color: "white",
     },
-  },
-  btn: {
-    textTransform: "none",
-    width: "fit-content",
-    marginTop: "15px",
-    marginBottom: "20px",
   },
 }));

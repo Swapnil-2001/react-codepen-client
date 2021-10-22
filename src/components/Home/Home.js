@@ -1,27 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import Box from "@mui/material/Box";
+import { Link, useHistory } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
-import TextField from "@mui/material/TextField";
 import DeleteIcon from "@mui/icons-material/Delete";
+import LoginIcon from "@mui/icons-material/Login";
 
 import useStyles from "./styles";
 import { getAllPens } from "../../actions/pen";
 import { SET_NAME, LOGOUT } from "../../constants/actionTypes";
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -29,14 +16,9 @@ const Home = () => {
   const user = JSON.parse(localStorage.getItem("profile"));
   const { allPens } = useSelector((state) => state.pen);
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState("");
   const [name, setName] = useState("");
   const classes = useStyles();
-
-  useEffect(() => {
-    if (!user) {
-      history.push("/login");
-    }
-  }, [user, history]);
 
   useEffect(() => {
     dispatch(getAllPens());
@@ -48,6 +30,10 @@ const Home = () => {
   };
 
   const handleClick = () => {
+    if (name === "") {
+      setError("Name cannot be empty.");
+      return;
+    }
     dispatch({ type: SET_NAME, name });
     history.push("/pen/new");
   };
@@ -59,10 +45,33 @@ const Home = () => {
 
   return (
     <div style={{ padding: "25px 50px" }}>
-      <Button style={{ textTransform: "none" }} onClick={() => setOpen(true)}>
-        New pen
-      </Button>
-      <Button onClick={logout}>Log Out</Button>
+      {user ? (
+        <>
+          <Button
+            style={{ textTransform: "none" }}
+            onClick={() => {
+              setError("");
+              setOpen(true);
+            }}
+          >
+            New pen
+          </Button>
+          <Button onClick={logout}>Log Out</Button>
+        </>
+      ) : (
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button
+            variant="contained"
+            size="large"
+            component={Link}
+            to="/login"
+            endIcon={<LoginIcon />}
+            style={{ textTransform: "none" }}
+          >
+            Login
+          </Button>
+        </div>
+      )}
       <div className={classes.wrapper}>
         {allPens?.map((pen) => (
           <div
@@ -106,22 +115,39 @@ const Home = () => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box className={classes.box} sx={style}>
-          <TextField
+        <div className={classes.box}>
+          <input
             value={name}
-            style={{ width: "100%" }}
+            className={classes.new__pen__input}
             onChange={handleNameAdd}
-            label="Name (<=10 Characters)"
-            variant="outlined"
+            placeholder="Name (<=10 Characters)"
           />
+          {error && (
+            <p
+              style={{
+                background: "#A2D2FF",
+                padding: "5px 10px",
+                color: "#950101",
+                borderRadius: "5px",
+                marginBottom: "0",
+              }}
+            >
+              {error}
+            </p>
+          )}
           <Button
-            style={{ marginTop: "15px", width: "fit-content" }}
+            style={{
+              margin: "20px 0 30px 0",
+              width: "fit-content",
+              textTransform: "none",
+            }}
             variant="contained"
+            color="info"
             onClick={handleClick}
           >
             Create
           </Button>
-        </Box>
+        </div>
       </Modal>
     </div>
   );
