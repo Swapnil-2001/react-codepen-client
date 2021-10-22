@@ -1,20 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
-import { Link, useHistory } from "react-router-dom";
-import SaveIcon from "@mui/icons-material/Save";
-import EditIcon from "@mui/icons-material/Edit";
-import ClearIcon from "@mui/icons-material/Clear";
-import Avatar from "@mui/material/Avatar";
-import SettingsIcon from "@mui/icons-material/Settings";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
+import { useHistory } from "react-router-dom";
 import { store } from "react-notifications-component";
 
+import Navbar from "./Navbar";
 import Editor from "./Editor";
 import Settings from "./Settings";
 import { getUser } from "../../actions/auth";
-import { getPenById, createPen, updatePen, likePen } from "../../actions/pen";
+import { getPenById, createPen, updatePen } from "../../actions/pen";
 import "./styles.css";
 import "react-notifications-component/dist/theme.css";
 
@@ -38,19 +32,10 @@ const Pen = ({
   const [js, setJs] = useState("");
   const [srcDoc, setSrcDoc] = useState("");
 
-  const [editName, setEditName] = useState(false);
-  // checks if name is being edited or not; accordingly have "name" as input / div
   const [newName, setNewName] = useState(name);
   // sets the name after editName === true
 
   const [openModal, setOpenModal] = useState(false);
-
-  useEffect(() => {
-    // primarily handles user trying to save after session has expired
-    if (error) alert(error.message);
-    // in case of page refresh; localStorage remains unaffected
-    if (user && !currentUser) dispatch(getUser(user.result?.username));
-  }, [user, dispatch, currentUser, error, history]);
 
   useEffect(() => {
     if (saved) {
@@ -72,9 +57,14 @@ const Pen = ({
   }, [saved]);
 
   useEffect(() => {
-    if (id !== "new") {
-      dispatch(getPenById(id));
-    }
+    // primarily handles user trying to save after session has expired
+    if (error) alert(error.message);
+    // in case of page refresh; localStorage remains unaffected
+    if (user && !currentUser) dispatch(getUser(user.result?.username));
+  }, [user, dispatch, currentUser, error, history]);
+
+  useEffect(() => {
+    if (id !== "new") dispatch(getPenById(id));
   }, [dispatch, id]);
 
   useEffect(() => {
@@ -83,10 +73,7 @@ const Pen = ({
       setCss(pen.css);
       setJs(pen.js);
     }
-    if (name) setNewName(name);
-    // if page refreshed before a new pen has been saved to DB
-    else if (id === "new") history.push("/");
-  }, [pen, name, id, history]);
+  }, [pen, id]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -101,18 +88,12 @@ const Pen = ({
     return () => clearTimeout(timeout);
   }, [html, css, js]);
 
-  // change name of pen
-  const handleChange = (e) => {
-    const { value } = e.target;
-    setNewName(value.length > 10 ? value.substring(0, 10) : value);
-  };
-
   const handlePenSave = () => {
     if (!user) {
       history.push("/login");
       return;
     }
-    if (id === "new") {
+    if (id === "new")
       // saving for the first time
       dispatch(
         createPen(
@@ -120,7 +101,7 @@ const Pen = ({
           history
         )
       );
-    } else {
+    else {
       if (user?.result?._id === pen.creator) {
         dispatch(
           updatePen(pen._id, {
@@ -135,16 +116,6 @@ const Pen = ({
         );
       } else dispatch(createPen({ name, html, css, js }, history));
       // essentially cloning a project
-    }
-  };
-
-  const handleNameSave = (e) => {
-    if (e.key === "Enter") {
-      if (newName === "") alert("Name cannot be empty.");
-      else {
-        handlePenSave();
-        setEditName(false);
-      }
     }
   };
 
@@ -163,93 +134,13 @@ const Pen = ({
 
   return (
     <>
-      <nav className="navbar">
-        <div className="navbar-item">
-          <Link
-            to="/"
-            style={{
-              textDecoration: "none",
-              fontWeight: "700",
-              margin: "auto 0",
-              marginLeft: "15px",
-              color: "white",
-            }}
-          >
-            React-Codepen
-          </Link>
-          <div onClick={handlePenSave} className="save-div">
-            <SaveIcon style={{ color: "white" }} />
-          </div>
-        </div>
-        <div className="navbar-item project-name">
-          {pen?.creator === user?.result?._id ? (
-            editName ? (
-              <>
-                <input
-                  className="name-input"
-                  value={newName}
-                  onKeyPress={handleNameSave}
-                  onChange={handleChange}
-                />
-                <ClearIcon
-                  style={{
-                    fontSize: 20,
-                    margin: "auto 0",
-                    marginLeft: "5px",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => {
-                    setEditName(false);
-                    setNewName(name);
-                  }}
-                />
-              </>
-            ) : (
-              <>
-                {name}
-                <EditIcon
-                  style={{
-                    fontSize: 20,
-                    margin: "auto 0",
-                    marginLeft: "5px",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => setEditName(true)}
-                />
-              </>
-            )
-          ) : (
-            <>{name}</>
-          )}
-        </div>
-        <div className="navbar-item right-panel">
-          <div
-            onClick={() => dispatch(likePen(pen?._id))}
-            className="item like-div"
-          >
-            {pen?.likes.includes(user?.result?._id) ? (
-              <FavoriteIcon style={{ marginRight: "7px" }} />
-            ) : (
-              <FavoriteBorderIcon style={{ marginRight: "7px" }} />
-            )}
-            {pen?.likes.length}
-          </div>
-          <div className="item">
-            <SettingsIcon
-              style={{ cursor: "pointer" }}
-              onClick={() => setOpenModal(true)}
-            />
-          </div>
-          <div className="item">
-            <Avatar
-              style={{ backgroundColor: "#5C7AEA" }}
-              sx={{ width: 35, height: 35 }}
-            >
-              {user?.result?.username.charAt(0)}
-            </Avatar>
-          </div>
-        </div>
-      </nav>
+      <Navbar
+        newName={newName}
+        setNewName={setNewName}
+        id={id}
+        handlePenSave={handlePenSave}
+        setOpenModal={setOpenModal}
+      />
       <div className="pane top-pane">
         <Editor
           language="xml"

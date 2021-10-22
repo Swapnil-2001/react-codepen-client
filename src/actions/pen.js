@@ -63,7 +63,11 @@ export const updatePen = (id, penData) => async (dispatch) => {
 export const likePen = (id) => async (dispatch) => {
   try {
     const { data } = await api.likePen(id);
-    dispatch({ type: LIKE_PEN, payload: data });
+    if (data.message) dispatch({ type: SET_ERROR, error: data });
+    else {
+      dispatch({ type: LIKE_PEN, payload: data });
+      dispatch({ type: SET_ERROR, error: null });
+    }
   } catch (error) {
     console.log(error);
   }
