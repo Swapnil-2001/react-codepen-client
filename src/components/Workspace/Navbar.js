@@ -114,7 +114,7 @@ const Navbar = ({ newName, setNewName, id, handlePenSave, setOpenModal }) => {
             }
             dispatch(likePen(pen?._id));
           }}
-          className="item like-div"
+          className="item hover-div"
         >
           {id !== "new" ? (
             user && pen?.likes.includes(user.result?._id) ? (
@@ -132,11 +132,8 @@ const Navbar = ({ newName, setNewName, id, handlePenSave, setOpenModal }) => {
             <div>Liking enabled once you save.</div>
           )}
         </div>
-        <div className="item">
-          <SettingsIcon
-            style={{ cursor: "pointer" }}
-            onClick={() => setOpenModal(true)}
-          />
+        <div onClick={() => setOpenModal(true)} className="item hover-div">
+          <SettingsIcon />
         </div>
         <div className="item">
           <Avatar

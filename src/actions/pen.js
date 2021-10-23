@@ -11,8 +11,10 @@ import * as api from "../api/index.js";
 
 export const getAllPens = () => async (dispatch) => {
   try {
+    dispatch({ type: START_LOADING_POST });
     const { data } = await api.getAllPens();
     dispatch({ type: SET_ALL_PENS, data });
+    dispatch({ type: STOP_LOADING_POST });
   } catch (error) {
     console.log(error);
   }

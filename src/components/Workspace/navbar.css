@@ -51,11 +51,11 @@
   flex-wrap: 0;
 }
 
-.like-div {
+.hover-div {
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
-.like-div:hover {
+.hover-div:hover {
   background-color: #423f3e;
 }

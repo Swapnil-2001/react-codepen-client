@@ -1,6 +1,29 @@
 import { makeStyles } from "@mui/styles";
 
 export default makeStyles(() => ({
+  left__div: {
+    background: "hsl(225, 6%, 30%)",
+    height: "auto",
+    minHeight: "100vh",
+    width: "20vw",
+  },
+  heading: {
+    textAlign: "center",
+    color: "#A2D2FF",
+  },
+  item: {
+    cursor: "pointer",
+    padding: "2px 20px",
+    textAlign: "center",
+    transition: "background 0.3s",
+    "&:hover": {
+      background: "hsl(225, 6%, 40%)",
+    },
+  },
+  right__div: {
+    padding: "25px 50px",
+    width: "100%",
+  },
   box: {
     position: "absolute",
     top: "50%",
@@ -17,9 +40,11 @@ export default makeStyles(() => ({
   },
   wrapper: {
     display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "space-evenly",
   },
   thumbnail: {
-    width: "30%",
+    width: "400px",
     background: "hsl(225, 6%, 30%)",
     color: "white",
     margin: "10px",
