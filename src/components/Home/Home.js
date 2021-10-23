@@ -9,7 +9,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 import useStyles from "./styles";
 import LeftBar from "./LeftBar";
-import { getAllPens } from "../../actions/pen";
+import { getAllPens, getPensByUser } from "../../actions/pen";
 import { SET_NAME, LOGOUT } from "../../constants/actionTypes";
 
 const Home = () => {
@@ -17,13 +17,21 @@ const Home = () => {
   const history = useHistory();
   const user = JSON.parse(localStorage.getItem("profile"));
   const { isLoading, allPens } = useSelector((state) => state.pen);
+  const [heading, setHeading] = useState(user ? "Your Pens" : "All Pens");
   const [open, setOpen] = useState(false);
   const [error, setError] = useState("");
   const [name, setName] = useState("");
   const classes = useStyles();
 
   useEffect(() => {
-    dispatch(getAllPens());
+    // adding "user" in the dep. array causes infinite re-render.
+    // probably because useEffect is triggered BEFORE "user" has
+    // been fetched from localStorage. Then it IS fetched, which
+    // triggers useEffect again, WHICH re-renders the page, and
+    // the cycle goes on and on. So use "currentUser".
+    const currentUser = JSON.parse(localStorage.getItem("profile"));
+    if (currentUser) dispatch(getPensByUser(currentUser.result?._id));
+    else dispatch(getAllPens());
   }, [dispatch]);
 
   const handleNameAdd = (e) => {
@@ -33,11 +41,15 @@ const Home = () => {
 
   const handleClick = () => {
     if (name === "") {
-      setError("Name cannot be empty.");
+      setError("Name cannot be empty!");
       return;
     }
     dispatch({ type: SET_NAME, name });
     history.push("/pen/new");
+  };
+
+  const handleNameSave = (e) => {
+    if (e.key === "Enter") handleClick();
   };
 
   const logout = () => {
@@ -56,7 +68,12 @@ const Home = () => {
     <div style={{ display: "flex" }}>
       {user && (
         <div className={classes.left__div}>
-          <LeftBar setError={setError} setOpen={setOpen} />
+          <LeftBar
+            user={user}
+            setHeading={setHeading}
+            setError={setError}
+            setOpen={setOpen}
+          />
         </div>
       )}
       <div className={classes.right__div}>
@@ -78,6 +95,7 @@ const Home = () => {
             </Button>
           </div>
         )}
+        <h1>{heading}</h1>
         <div className={classes.wrapper}>
           {allPens?.map((pen) => (
             <div
@@ -125,21 +143,22 @@ const Home = () => {
             <input
               value={name}
               className={classes.new__pen__input}
+              onKeyPress={handleNameSave}
               onChange={handleNameAdd}
-              placeholder="Name (<=10 Characters)"
+              placeholder="Name..."
             />
             {error && (
-              <p
+              <h4
                 style={{
-                  background: "#A2D2FF",
+                  background: "#5C7AEA",
                   padding: "5px 10px",
-                  color: "#950101",
+                  color: "#fff",
                   borderRadius: "5px",
                   marginBottom: "0",
                 }}
               >
                 {error}
-              </p>
+              </h4>
             )}
             <Button
               style={{
@@ -148,7 +167,6 @@ const Home = () => {
                 textTransform: "none",
               }}
               variant="contained"
-              color="info"
               onClick={handleClick}
             >
               Create

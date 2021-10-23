@@ -18,6 +18,7 @@ export const signin = (formData) => API.post("/user/signin", formData);
 
 export const getAllPens = () => API.get("/pen");
 export const getPenById = (id) => API.get(`/pen/${id}`);
+export const getPensByUser = (userId) => API.get(`/pen/all/${userId}`);
 export const createPen = (penData) => API.post("/pen/create", penData);
 export const updatePen = (id, penData) => API.patch(`/pen/save/${id}`, penData);
 export const likePen = (id) => API.patch(`/pen/like/${id}`);

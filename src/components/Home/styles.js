@@ -59,11 +59,16 @@ export default makeStyles(() => ({
   },
   new__pen__input: {
     width: "80%",
+    background: "#5C7AEA",
+    color: "white",
     marginTop: "30px",
     padding: "15px",
     fontSize: "16px",
     fontFamily: "Arial",
     borderRadius: "5px",
+    "&::-webkit-input-placeholder": {
+      color: "#fff",
+    },
   },
   info__div: {
     display: "flex",

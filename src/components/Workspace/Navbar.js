@@ -9,6 +9,7 @@ import Avatar from "@mui/material/Avatar";
 import SettingsIcon from "@mui/icons-material/Settings";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
 
 import { likePen } from "../../actions/pen";
 import "./navbar.css";
@@ -132,6 +133,11 @@ const Navbar = ({ newName, setNewName, id, handlePenSave, setOpenModal }) => {
             <div>Liking enabled once you save.</div>
           )}
         </div>
+        {pen && (
+          <div className="item hover-div">
+            <StarBorderIcon />
+          </div>
+        )}
         <div onClick={() => setOpenModal(true)} className="item hover-div">
           <SettingsIcon />
         </div>

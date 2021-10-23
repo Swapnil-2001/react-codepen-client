@@ -20,6 +20,17 @@ export const getAllPens = () => async (dispatch) => {
   }
 };
 
+export const getPensByUser = (userId) => async (dispatch) => {
+  try {
+    dispatch({ type: START_LOADING_POST });
+    const { data } = await api.getPensByUser(userId);
+    dispatch({ type: SET_ALL_PENS, data });
+    dispatch({ type: STOP_LOADING_POST });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getPenById = (id) => async (dispatch) => {
   try {
     dispatch({ type: START_LOADING_POST });

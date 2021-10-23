@@ -1,8 +1,11 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 
+import { getAllPens, getPensByUser } from "../../actions/pen";
 import useStyles from "./styles";
 
-const LeftBar = ({ setError, setOpen }) => {
+const LeftBar = ({ user, setHeading, setError, setOpen }) => {
+  const dispatch = useDispatch();
   const classes = useStyles();
   return (
     <div style={{ paddingTop: "20px", position: "sticky" }}>
@@ -17,8 +20,27 @@ const LeftBar = ({ setError, setOpen }) => {
         <h4>New Pen</h4>
       </div>
       <h2 className={classes.heading}>Your Work</h2>
-      <div className={classes.item}>
+      <div
+        onClick={() => {
+          setHeading("Your Pens");
+          dispatch(getPensByUser(user?.result?._id));
+        }}
+        className={classes.item}
+      >
         <h4>Your Pens</h4>
+      </div>
+      <div className={classes.item}>
+        <h4>Starred Pens</h4>
+      </div>
+      <h2 className={classes.heading}>All</h2>
+      <div
+        onClick={() => {
+          setHeading("All Pens");
+          dispatch(getAllPens());
+        }}
+        className={classes.item}
+      >
+        <h4>All Pens</h4>
       </div>
     </div>
   );
