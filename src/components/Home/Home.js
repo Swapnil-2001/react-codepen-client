@@ -64,6 +64,8 @@ const Home = () => {
       </div>
     );
 
+  console.log(allPens);
+
   return (
     <div style={{ display: "flex" }}>
       {user && (
@@ -97,41 +99,45 @@ const Home = () => {
         )}
         <h1>{heading}</h1>
         <div className={classes.wrapper}>
-          {allPens?.map((pen) => (
-            <div
-              key={pen._id}
-              className={classes.thumbnail}
-              onClick={() => {
-                history.push(`/pen/${pen._id}`);
-              }}
-            >
-              <div className={classes.frame}>
-                <iframe
-                  scrolling="no"
-                  srcDoc={`<html>
+          {allPens.length === 0 ? (
+            <h2>No Pens!</h2>
+          ) : (
+            allPens?.map((pen) => (
+              <div
+                key={pen._id}
+                className={classes.thumbnail}
+                onClick={() => {
+                  history.push(`/pen/${pen._id}`);
+                }}
+              >
+                <div className={classes.frame}>
+                  <iframe
+                    scrolling="no"
+                    srcDoc={`<html>
                     <style>${pen.css}</style>
                     <body>${pen.html}</body>
                     <script>${pen.js}</script>
                   </html>`}
-                  title="output"
-                  sandbox="allow-scripts"
-                  frameBorder="0"
-                  width="100%"
-                  height="100%"
-                />
+                    title="output"
+                    sandbox="allow-scripts"
+                    frameBorder="0"
+                    width="100%"
+                    height="100%"
+                  />
+                </div>
+                <div className={classes.info__div}>
+                  <p>
+                    {pen.name}, by {pen.creatorUsername}
+                  </p>
+                  {pen.creator === user?.result?._id && (
+                    <span name="delete-span">
+                      <DeleteIcon style={{ color: "#FF5C58" }} />
+                    </span>
+                  )}
+                </div>
               </div>
-              <div className={classes.info__div}>
-                <p>
-                  {pen.name}, by {pen.creatorUsername}
-                </p>
-                {pen.creator === user?.result?._id && (
-                  <span name="delete-span">
-                    <DeleteIcon style={{ color: "#FF5C58" }} />
-                  </span>
-                )}
-              </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
         <Modal
           open={open}

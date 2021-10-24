@@ -6,6 +6,7 @@ import {
   SET_ERROR,
   SET_SAVED,
   LIKE_PEN,
+  STAR_PEN,
 } from "../constants/actionTypes";
 import * as api from "../api/index.js";
 
@@ -24,6 +25,17 @@ export const getPensByUser = (userId) => async (dispatch) => {
   try {
     dispatch({ type: START_LOADING_POST });
     const { data } = await api.getPensByUser(userId);
+    dispatch({ type: SET_ALL_PENS, data });
+    dispatch({ type: STOP_LOADING_POST });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getStarredPens = (userId) => async (dispatch) => {
+  try {
+    dispatch({ type: START_LOADING_POST });
+    const { data } = await api.getStarredPens(userId);
     dispatch({ type: SET_ALL_PENS, data });
     dispatch({ type: STOP_LOADING_POST });
   } catch (error) {
@@ -81,9 +93,19 @@ export const likePen = (id) => async (dispatch) => {
     if (data.message) {
       dispatch({ type: SET_ERROR, error: data });
       dispatch({ type: SET_ERROR, error: null });
-    } else {
-      dispatch({ type: LIKE_PEN, payload: data });
-    }
+    } else dispatch({ type: LIKE_PEN, payload: data });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const starPen = (id) => async (dispatch) => {
+  try {
+    const { data } = await api.starPen(id);
+    if (data.message) {
+      dispatch({ type: SET_ERROR, error: data });
+      dispatch({ type: SET_ERROR, error: null });
+    } else dispatch({ type: STAR_PEN, payload: data });
   } catch (error) {
     console.log(error);
   }

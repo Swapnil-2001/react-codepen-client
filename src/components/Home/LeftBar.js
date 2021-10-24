@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 
-import { getAllPens, getPensByUser } from "../../actions/pen";
+import { getStarredPens, getAllPens, getPensByUser } from "../../actions/pen";
 import useStyles from "./styles";
 
 const LeftBar = ({ user, setHeading, setError, setOpen }) => {
@@ -29,7 +29,13 @@ const LeftBar = ({ user, setHeading, setError, setOpen }) => {
       >
         <h4>Your Pens</h4>
       </div>
-      <div className={classes.item}>
+      <div
+        onClick={() => {
+          setHeading("Starred Pens");
+          dispatch(getStarredPens(user?.result?._id));
+        }}
+        className={classes.item}
+      >
         <h4>Starred Pens</h4>
       </div>
       <h2 className={classes.heading}>All</h2>

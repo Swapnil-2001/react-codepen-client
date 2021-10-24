@@ -1,6 +1,6 @@
 export const AUTH = "AUTH";
 export const LOGOUT = "LOGOUT";
-export const SET_USER = "SET_USER";
+export const STAR_PEN = "STAR_PEN";
 
 export const START_LOADING_POST = "START_LOADING_POST";
 export const SET_ERROR = "SET_ERROR";

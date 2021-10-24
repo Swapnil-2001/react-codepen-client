@@ -7,7 +7,6 @@ import { store } from "react-notifications-component";
 import Navbar from "./Navbar";
 import Editor from "./Editor";
 import Settings from "./Settings";
-import { getUser } from "../../actions/auth";
 import { getPenById, createPen, updatePen } from "../../actions/pen";
 import "./pen.css";
 import "react-notifications-component/dist/theme.css";
@@ -21,7 +20,6 @@ const Pen = ({
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const { currentUser } = useSelector((state) => state.auth);
   // have name separately because "pen" is not set until a new project is saved
   const { isLoading, name, pen, error, saved } = useSelector(
     (state) => state.pen
@@ -78,9 +76,7 @@ const Pen = ({
           pauseOnHover: true,
         },
       });
-    // in case of page refresh; localStorage remains unaffected
-    if (user && !currentUser) dispatch(getUser(user.result?.username));
-  }, [user, dispatch, currentUser, error, history]);
+  }, [error]);
 
   useEffect(() => {
     if (id !== "new") dispatch(getPenById(id));

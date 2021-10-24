@@ -9,9 +9,10 @@ import Avatar from "@mui/material/Avatar";
 import SettingsIcon from "@mui/icons-material/Settings";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 
-import { likePen } from "../../actions/pen";
+import { likePen, starPen } from "../../actions/pen";
 import "./navbar.css";
 import "react-notifications-component/dist/theme.css";
 
@@ -133,9 +134,13 @@ const Navbar = ({ newName, setNewName, id, handlePenSave, setOpenModal }) => {
             <div>Liking enabled once you save.</div>
           )}
         </div>
-        {pen && (
+        {pen && user && pen.starredBy?.includes(user.result?._id) ? (
           <div className="item hover-div">
-            <StarBorderIcon />
+            <StarIcon onClick={() => dispatch(starPen(pen._id))} />
+          </div>
+        ) : (
+          <div className="item hover-div">
+            <StarBorderIcon onClick={() => dispatch(starPen(pen._id))} />
           </div>
         )}
         <div onClick={() => setOpenModal(true)} className="item hover-div">
