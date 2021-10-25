@@ -48,13 +48,20 @@ export default makeStyles(() => ({
     background: "hsl(225, 6%, 30%)",
     color: "white",
     margin: "10px",
+    marginBottom: "30px",
     padding: "1rem",
     paddingBottom: "0",
     borderRadius: "10px",
+    // display: "flex",
+    // flexDirection: "column",
+    // justifyContent: "center",
     transition: "background 0.3s",
     "&:hover": {
       background: "hsl(225, 6%, 35%)",
       cursor: "pointer",
+      "& .dropdown__content": {
+        display: "block",
+      },
     },
   },
   new__pen__input: {
@@ -72,13 +79,22 @@ export default makeStyles(() => ({
   },
   info__div: {
     display: "flex",
-    padding: "20px 0",
+    paddingTop: "20px",
     "& p": {
       margin: "auto 0",
       fontWeight: "700",
     },
     "& span": {
       marginLeft: "auto",
+    },
+  },
+  delete: {
+    zIndex: "1000",
+    borderRadius: "50%",
+    padding: "5px",
+    transition: "background 0.3s",
+    "&:hover": {
+      background: "#F5E9FF",
     },
   },
   frame: {

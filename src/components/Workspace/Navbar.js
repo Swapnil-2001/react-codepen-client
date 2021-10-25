@@ -135,12 +135,18 @@ const Navbar = ({ newName, setNewName, id, handlePenSave, setOpenModal }) => {
           )}
         </div>
         {pen && user && pen.starredBy?.includes(user.result?._id) ? (
-          <div className="item hover-div">
-            <StarIcon onClick={() => dispatch(starPen(pen._id))} />
+          <div
+            onClick={() => dispatch(starPen(pen._id))}
+            className="item hover-div"
+          >
+            <StarIcon />
           </div>
         ) : (
-          <div className="item hover-div">
-            <StarBorderIcon onClick={() => dispatch(starPen(pen._id))} />
+          <div
+            onClick={() => dispatch(starPen(pen._id))}
+            className="item hover-div"
+          >
+            <StarBorderIcon />
           </div>
         )}
         <div onClick={() => setOpenModal(true)} className="item hover-div">

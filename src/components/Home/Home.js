@@ -6,10 +6,11 @@ import Modal from "@mui/material/Modal";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LoginIcon from "@mui/icons-material/Login";
 import CircularProgress from "@mui/material/CircularProgress";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 import useStyles from "./styles";
 import LeftBar from "./LeftBar";
-import { getAllPens, getPensByUser } from "../../actions/pen";
+import { getAllPens, getPensByUser, deletePen } from "../../actions/pen";
 import { SET_NAME, LOGOUT } from "../../constants/actionTypes";
 
 const Home = () => {
@@ -19,6 +20,7 @@ const Home = () => {
   const { isLoading, allPens } = useSelector((state) => state.pen);
   const [heading, setHeading] = useState(user ? "Your Pens" : "All Pens");
   const [open, setOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState("");
   const [error, setError] = useState("");
   const [name, setName] = useState("");
   const classes = useStyles();
@@ -110,7 +112,7 @@ const Home = () => {
               <div
                 key={pen._id}
                 className={classes.thumbnail}
-                onClick={() => {
+                onClick={(e) => {
                   history.push(`/pen/${pen._id}`);
                 }}
               >
@@ -134,11 +136,29 @@ const Home = () => {
                     {pen.name}, by {pen.creatorUsername}
                   </p>
                   {pen.creator === user?.result?._id && (
-                    <span name="delete-span">
+                    <span
+                      className={classes.delete}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setDeleteId(pen._id);
+                      }}
+                      name="delete-span"
+                    >
                       <DeleteIcon style={{ color: "#FF5C58" }} />
                     </span>
                   )}
                 </div>
+                <span
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: "10px 0",
+                  }}
+                >
+                  {pen.likes?.length}{" "}
+                  <FavoriteIcon style={{ marginLeft: "5px" }} />
+                </span>
               </div>
             ))
           )}
@@ -181,6 +201,38 @@ const Home = () => {
             >
               Create
             </Button>
+          </div>
+        </Modal>
+        <Modal
+          open={deleteId}
+          onClose={() => setDeleteId("")}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <div className={classes.box}>
+            <div style={{ margin: "30px", marginTop: "50px" }}>
+              Are you sure you want to delete this pen?
+            </div>
+            <div style={{ marginBottom: "30px" }}>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  dispatch(deletePen(deleteId));
+                  setDeleteId("");
+                }}
+                style={{ marginRight: "20px" }}
+                color="error"
+              >
+                Yes
+              </Button>
+              <Button
+                onClick={() => setDeleteId("")}
+                variant="contained"
+                color="info"
+              >
+                No
+              </Button>
+            </div>
           </div>
         </Modal>
       </div>

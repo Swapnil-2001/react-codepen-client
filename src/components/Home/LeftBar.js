@@ -8,7 +8,7 @@ const LeftBar = ({ user, setHeading, setError, setOpen }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   return (
-    <div style={{ paddingTop: "20px", position: "sticky" }}>
+    <div style={{ paddingTop: "20px" }}>
       <h2 className={classes.heading}>Create</h2>
       <div
         onClick={() => {

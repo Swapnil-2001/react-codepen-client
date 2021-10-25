@@ -7,6 +7,7 @@ import {
   SET_SAVED,
   LIKE_PEN,
   STAR_PEN,
+  DELETE_PEN,
 } from "../constants/actionTypes";
 import * as api from "../api/index.js";
 
@@ -106,6 +107,15 @@ export const starPen = (id) => async (dispatch) => {
       dispatch({ type: SET_ERROR, error: data });
       dispatch({ type: SET_ERROR, error: null });
     } else dispatch({ type: STAR_PEN, payload: data });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deletePen = (id) => async (dispatch) => {
+  try {
+    await api.deletePen(id);
+    dispatch({ type: DELETE_PEN, id });
   } catch (error) {
     console.log(error);
   }

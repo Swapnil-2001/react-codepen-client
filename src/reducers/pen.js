@@ -8,6 +8,7 @@ import {
   SET_SAVED,
   LIKE_PEN,
   STAR_PEN,
+  DELETE_PEN,
 } from "../constants/actionTypes";
 
 const reducer = (
@@ -51,6 +52,12 @@ const reducer = (
         allPens: state.allPens.map((p) =>
           p._id === action.payload._id ? action.payload : p
         ),
+      };
+    case DELETE_PEN:
+      return {
+        ...state,
+        pen: null,
+        allPens: state.allPens.filter((p) => p._id !== action.id),
       };
     default:
       return state;

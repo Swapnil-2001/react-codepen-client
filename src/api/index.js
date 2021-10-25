@@ -24,3 +24,4 @@ export const createPen = (penData) => API.post("/pen/create", penData);
 export const updatePen = (id, penData) => API.patch(`/pen/save/${id}`, penData);
 export const likePen = (id) => API.patch(`/pen/like/${id}`);
 export const starPen = (id) => API.patch(`/pen/star/${id}`);
+export const deletePen = (id) => API.delete(`/pen/${id}`);
