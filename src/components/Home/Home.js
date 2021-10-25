@@ -64,8 +64,6 @@ const Home = () => {
       </div>
     );
 
-  console.log(allPens);
-
   return (
     <div style={{ display: "flex" }}>
       {user && (
@@ -80,9 +78,15 @@ const Home = () => {
       )}
       <div className={classes.right__div}>
         {user ? (
-          <>
-            <Button onClick={logout}>Log Out</Button>
-          </>
+          <div style={{ textAlign: "right" }}>
+            <Button
+              variant="contained"
+              style={{ textTransform: "none" }}
+              onClick={logout}
+            >
+              Log Out
+            </Button>
+          </div>
         ) : (
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <Button

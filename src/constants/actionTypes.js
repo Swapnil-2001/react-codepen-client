@@ -1,5 +1,6 @@
 export const AUTH = "AUTH";
 export const LOGOUT = "LOGOUT";
+export const SET_AUTH_ERROR = "SET_AUTH_ERROR";
 export const STAR_PEN = "STAR_PEN";
 
 export const START_LOADING_POST = "START_LOADING_POST";

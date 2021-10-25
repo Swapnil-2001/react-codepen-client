@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import Button from "@mui/material/Button";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -29,6 +29,8 @@ const Signup = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();
+  const { error } = useSelector((state) => state.auth);
+  const [errorMessage, setErrorMessage] = useState("");
   const [userData, setUserData] = useState({
     username: "",
     password: "",
@@ -36,9 +38,21 @@ const Signup = () => {
     email: "",
   });
 
+  useEffect(() => {
+    if (error) setErrorMessage(error.message);
+  }, [error]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (userData.password !== userData.confirmPassword) return;
+    Object.keys(userData).map((key) => (userData[key] = userData[key].trim()));
+    if (!userData.username || !userData.password || !userData.email) {
+      setErrorMessage("Please fill out all the fields.");
+      return;
+    }
+    if (userData.password !== userData.confirmPassword) {
+      setErrorMessage("Passwords must match!");
+      return;
+    }
     dispatch(
       signup(
         {
@@ -94,6 +108,7 @@ const Signup = () => {
             setUserData({ ...userData, confirmPassword: e.target.value })
           }
         />
+        {errorMessage && <div style={{ color: "#FF0000" }}>{errorMessage}</div>}
         <Button
           size="large"
           variant="contained"
