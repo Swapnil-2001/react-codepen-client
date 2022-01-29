@@ -1,3 +1,12 @@
+Client side code for the full-stack clone of Codepen built using the MERN stack, with Redux for global state management. Features include:
+1. Testing HTML/CSS/JS code snippets directly from the browser, with the help of Codemirror
+2. User authentication using JWT
+3. Saving / deleting pens
+4. "Liking" pens
+5. "Starring" pens for future reference
+
+Backend code at [react-codepen-backend](https://github.com/Swapnil-2001/react-codepen-server)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
